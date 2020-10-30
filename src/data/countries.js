@@ -2,9 +2,12 @@ import API from './fetchCountries';
 import refs from './refs';
 import setCountries from '../templates/list_countries.hbs';
 import oneCountries from '../templates/one_country.hbs';
-import '@pnotify/core/dist/BrightTheme.css';
+// import '@pnotify/core/dist/BrightTheme.css';
 import '@pnotify/core/dist/PNotify.css';
-import { alert, defaultModules } from '@pnotify/core';
+import { error } from '@pnotify/core';
+import { defaults } from '@pnotify/core';
+
+defaults.delay = 2000;
 
 const debounce = require('lodash.debounce');
 
@@ -28,8 +31,11 @@ function onSearch(e) {
         }
         if (data.length > 10) {
             refs.listCountries.innerHTML = '';
-           alert('введите название страны');
+           error({
+              text: "Too many matches found. Please enter a more specific query!"
+          });
         }
+        
     
     }).catch(error => {
         cleanMarkup();
