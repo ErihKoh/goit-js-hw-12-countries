@@ -6,7 +6,8 @@ import '@pnotify/core/dist/BrightTheme.css';
 import '@pnotify/core/dist/PNotify.css';
 var debounce = require('lodash.debounce');
 
-refs.searchForm.addEventListener('input', debounce(onSearch, 1000));
+refs.searchForm.addEventListener('input', debounce(onSearch, 500));
+
 function onSearch(e) {
     e.preventDefault();
     const sourchName = e.target.value;
@@ -14,11 +15,11 @@ function onSearch(e) {
 
     API.fetchCountries(sourchName).then(data => {
         if (data.length <= 10 && data.length > 1) {
-            refs.listCountries.innerHTML = '';
+            cleanMarkup();
             return refs.listCountries.insertAdjacentHTML('beforeend', setCountries(data));
         }
         if (data.length === 1) {
-            refs.listCountries.innerHTML = '';
+            cleanMarkup();
             const markup = data.map(({ name, capital, population, languages, flag }) =>
                 oneCountries({ name, capital, population, languages, flag }))
             return refs.listCountries.insertAdjacentHTML('beforeend', markup)
@@ -29,7 +30,11 @@ function onSearch(e) {
         }
     
     }).catch(error => {
-        refs.listCountries.innerHTML = '';
+        cleanMarkup();
         console.log('введите название страны')
     });
+}
+
+function cleanMarkup() {
+    refs.listCountries.innerHTML = '';
 }
