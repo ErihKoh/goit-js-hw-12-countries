@@ -4,7 +4,9 @@ import setCountries from '../templates/list_countries.hbs';
 import oneCountries from '../templates/one_country.hbs';
 import '@pnotify/core/dist/BrightTheme.css';
 import '@pnotify/core/dist/PNotify.css';
-var debounce = require('lodash.debounce');
+import { alert, defaultModules } from '@pnotify/core';
+
+const debounce = require('lodash.debounce');
 
 refs.searchForm.addEventListener('input', debounce(onSearch, 500));
 
@@ -26,7 +28,7 @@ function onSearch(e) {
         }
         if (data.length > 10) {
             refs.listCountries.innerHTML = '';
-           
+           alert('введите название страны');
         }
     
     }).catch(error => {
