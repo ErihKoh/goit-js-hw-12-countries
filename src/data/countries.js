@@ -29,10 +29,13 @@ function onSearch(e) {
             return createMarkup(markup);
         }
         if (data.length === 1) {
-            // cleanMarkup();
-            const markup = data.map(({ name, capital, population, languages, flag }) =>
-                oneCountries({ name, capital, population, languages, flag }))
+            cleanMarkup();
+            const { name, capital, population, languages, flag } = data[0];
+            const markup = oneCountries({ name, capital, population, languages, flag });
+            // data.map(({ name, capital, population, languages, flag }) =>
+                // oneCountries({ name, capital, population, languages, flag }))
             return createMarkup(markup);
+            // console.log(data[0])
         }
         if (data.length > 10) {
             // cleanMarkup();
