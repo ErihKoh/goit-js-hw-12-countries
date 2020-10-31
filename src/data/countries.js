@@ -36,12 +36,13 @@ function onSearch(e) {
         }
         if (data.length > 10) {
             // cleanMarkup();
-         return  error({
+            return error({
               text: "Too many matches found. Please enter a more specific query!"
           });
         }
         if (data.status === 404) {
-           return  error({
+            return error({
+                title: "Error",
                 text: "No country has been found. Please enter a more specific query!"
             });
         }
