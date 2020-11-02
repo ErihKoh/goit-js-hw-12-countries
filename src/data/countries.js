@@ -20,8 +20,12 @@ function onSearch(e) {
     const sourchName = e.target.value;
      cleanMarkup();
     
-
-    API.fetchCountries(sourchName).then(data => {
+ if (sourchName.length < 2) {
+     return error({
+              text: "Please enter a more specific query!"
+          });
+ } else {
+      API.fetchCountries(sourchName).then(data => {
         
         if (data.length <= 10 && data.length > 1) {
             // cleanMarkup();
@@ -54,11 +58,14 @@ function onSearch(e) {
     }).catch(err => {
         // cleanMarkup();
         return error({
+                title: "Error",
                 text: "Please enter a query!"
          });
         
         
     });
+    }
+   
 }
 
 function cleanMarkup() {
