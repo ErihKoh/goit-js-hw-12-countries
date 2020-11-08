@@ -15,62 +15,68 @@ const apiFetchCountries = new ApiFetchCountries();
 
 refs.searchForm.addEventListener('input', debounce(onSearch, 500));
 
-function onSearch(e) {
+async function onSearch(e) {
     e.preventDefault();
     apiFetchCountries.query = e.target.value;
     cleanMarkup();
     
-    if (apiFetchCountries.query.length < 2) {
-        return error({
-            text: "Please enter a more specific query!"
-        });
-    } else {
-        apiFetchCountries.fetchCountrie().then(dataResponce => {
-         
-          
-            if (dataResponce.length <= 10 && dataResponce.length > 1) {
+    try {
+        if (apiFetchCountries.query.length < 2) {
+            return error({
+                text: "Please enter a more specific query!"
+            });
+        } else {
+            // apiFetchCountries.fetchCountrie().then(dataResponce => {
+            const fetchResponce = await apiFetchCountries.fetchCountrie();
+            console.log(fetchResponce);
+   
+            if (fetchResponce.length <= 10 && fetchResponce.length > 1) {
                 // cleanMarkup();
-                console.log(dataResponce);
+                // console.log(dataResponce);
 
-                const markup = setCountries(dataResponce);
+                const markup = setCountries(fetchResponce);
                 return createMarkup(markup);
             }
-            if (dataResponce.length === 1) {
+            if (fetchResponce.length === 1) {
                 cleanMarkup();
-                const { name, capital, population, languages, flag } = dataResponce[0];
+                const { name, capital, population, languages, flag } = fetchResponce[0];
                 const markup = oneCountries({ name, capital, population, languages, flag });
                 // data.map(({ name, capital, population, languages, flag }) =>
                 // oneCountries({ name, capital, population, languages, flag }))
                 return createMarkup(markup);
                 // console.log(dataResponce[0]);
             }
-            if (dataResponce.length > 10) {
+            if (fetchResponce.length > 10) {
                 // cleanMarkup();
                 return error({
                     text: "Too many matches found. Please enter a more specific query!"
                 });
             }
-            if (dataResponce.status === 404) {
+            if (fetchResponce.status === 404) {
                 return error({
                     title: "Error",
                     text: "No country has been found. Please enter a more specific query!"
                 });
+            
             }
-        
-    
-        }).catch(err => {
-            // cleanMarkup();
-            return error({
-                title: "Error",
-                text: "Please enter a query!"
-            });
-        
-        
+        }
+    } catch (error) {
+        return error({
+            title: "Error",
+            text: "Please enter a query!"
         });
     }
 }
+
+
    
-// }
+    
+        
+    
+
+
+   
+
 
 function cleanMarkup() {
     refs.listCountries.innerHTML = '';
